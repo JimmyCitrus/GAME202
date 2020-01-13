@@ -25,6 +25,12 @@ SDL_Rect AIPaddle;
 SDL_Rect Ball;
 SDL_Rect CenterLine;
 
+//
+SDL_Event event;
+
+//Mouse coordinates
+int mouse_x, mouse_y;
+
 /*
 The purpose of the LoadGame function:
 */
@@ -34,7 +40,7 @@ void LoadGame()
 	//Create a pointer of the window
 	SDL_Window *window;
 
-	//
+	//Creating a window with all it's attributes
 	window = SDL_CreateWindow("Basic SDL Sprites",
 		SDL_WINDOWPOS_UNDEFINED,
 		SDL_WINDOWPOS_UNDEFINED,
@@ -45,7 +51,7 @@ void LoadGame()
 		return;
 	}
 
-	//
+	//If the renderer is not opening, close the program
 	renderer = SDL_CreateRenderer(window, -1, 0);
 	if (!renderer)
 	{
@@ -78,12 +84,37 @@ void LoadGame()
 }
 
 /*
-Purpose of the input function: 
+Purpose of the input function: To get user input
 */
 
 void Input()
 {
-
+	//Queue events
+	while (SDL_PollEvent(&event))
+	{
+		//Track mouse movement
+		if (event.type == SDL_MOUSEMOTION)
+		{
+			SDL_GetMouseState(&mouse_x, &mouse_y);
+		}
+		//Clicking x or pressing F4
+		if (event.type == SDL_QUIT)
+		{
+			running = false;
+		}
+		//Pressing a key
+		if (event.type == SDL_KEYDOWN)
+		{
+			switch (event.key.keysym.sym)
+			{
+				//Pressing ESC exits the game
+			case SDLK_ESCAPE:
+				running = false;
+				break;
+			}
+		}
+		
+	}
 }
 
 /*
@@ -92,7 +123,7 @@ Purpose of the update function:
 
 void Update()
 {
-
+	PlayerPaddle.y = mouse_y;
 }
 
 /*
