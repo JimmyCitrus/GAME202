@@ -10,6 +10,7 @@ Date: 1/13/20
 #include"SDL.h"
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 
 //Defining the window's width and height
 #define WINDOW_WIDTH     800
@@ -36,6 +37,10 @@ int mouse_x, mouse_y;
 //Speed and direction
 int speed_x, speed_y;
 int direction[2] = { -1, 1 };
+
+//Scores
+int PlayerScore = 0;
+int AIScore = 0;
 
 bool check_collision(SDL_Rect A, SDL_Rect B)
 {
@@ -77,6 +82,19 @@ bool check_collision(SDL_Rect A, SDL_Rect B)
 
 	//If none of the sides of A are outside B
 	return true;
+
+	//Display scores
+	if (Ball.x = 795)
+	{
+		PlayerScore++;
+		std::cout << "Player Score: " << PlayerScore << std::endl;
+	}
+	else if(Ball.x = 5)
+	{
+		AIScore++;
+		std::cout << "AI Score: " << AIScore << std::endl;
+	}
+
 }
 
 /*
@@ -128,6 +146,7 @@ void LoadGame()
 	Ball.h = 20;
 	Ball.w = 20;
 
+	//Defining the center line's attributes
 	CenterLine.x = 395;
 	CenterLine.y = 10;
 	CenterLine.h = 580;
@@ -163,6 +182,21 @@ void Input()
 			case SDLK_ESCAPE:
 				running = false;
 				break;
+
+			case SDLK_w:
+			{
+				AIPaddle.y -= 15;
+				if (AIPaddle.y <= 0)
+				{
+					AIPaddle.y = 0;
+				}
+				break;
+			}
+			case SDLK_s:
+			{
+				AIPaddle.y += 15;
+				break;
+			}
 			}
 		}
 		
@@ -201,14 +235,20 @@ void Update()
 		PlayerPaddle.y = 500;
 	}
 
-	SDL_Delay(10);
+	if (AIPaddle.y < 0 || AIPaddle.y > WINDOW_HEIGHT - AIPaddle.h)
+	{
+		AIPaddle.y = 500;
+	}
 
-	AIPaddle.y = Ball.y - AIPaddle.h / 2 + Ball.h / 2;
+	SDL_Delay(5);
+
+	//AIPaddle.y = Ball.y - AIPaddle.h / 2 + Ball.h / 2;
 
 	if (check_collision(Ball, AIPaddle) || check_collision(Ball, PlayerPaddle))
 	{
 		speed_x = -speed_x;
 	}
+
 }
 
 /*
@@ -222,7 +262,7 @@ void DrawScreen()
 
 	//Setting the color of the background
 	SDL_Rect background = { 0, 0, 800, 600 };
-	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 128);
 	SDL_RenderFillRect(renderer, &background);
 
 	//Setting the colors of the Paddles and Center line
