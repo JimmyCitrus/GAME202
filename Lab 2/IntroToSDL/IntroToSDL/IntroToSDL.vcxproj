@@ -158,6 +158,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="hts.bmp" />
+    <Image Include="jesse.bmp" />
     <Image Include="landscape.bmp" />
   </ItemGroup>
   <ItemGroup>

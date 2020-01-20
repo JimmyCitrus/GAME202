@@ -28,7 +28,7 @@ int LoadSprite(char *file, SDL_Renderer *renderer)
 
 	//sets the width and height of the images
 	sprite_w = temp->w;
-	sprite_h = temp->h;
+	sprite_h = 200;//temp->h;
 
 	// Set transparent pixel as the pixel at (0,0)
 	if (temp->format->palette) {
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
 		return false;
 	}
 
-	if (LoadSprite("hts.bmp", renderer) < 0) {
+	if (LoadSprite("jojo.bmp", renderer) < 0) {
 		return false;
 	}
 
@@ -156,12 +156,12 @@ int main(int argc, char *argv[])
 
 		if (velocities[0].x > 0)
 		{
-			velocities[0].x+0.5;
+			velocities[0].x++;
 		}
 
 		if (velocities[1].y > 0)
 		{
-			velocities[1].y+0.5;
+			velocities[1].y++;
 		}
 
 		SDL_Delay(20);

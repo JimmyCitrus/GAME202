@@ -26,6 +26,9 @@
     <Image Include="landscape.bmp">
       <Filter>Resource Files</Filter>
     </Image>
+    <Image Include="jesse.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <None Include="SDL2.dll">
