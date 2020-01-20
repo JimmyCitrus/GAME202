@@ -7,14 +7,13 @@
 #define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   600
 
-#define NUM_SPRITES     2
+#define NUM_SPRITES     6
 #define MAX_SPEED       1
 
 SDL_Texture *sprite;
 SDL_Rect positions[NUM_SPRITES];
 SDL_Rect velocities[NUM_SPRITES];
 int sprite_w, sprite_h;
-int velocityTime = 0;
 
 int LoadSprite(char *file, SDL_Renderer *renderer)
 {
@@ -137,28 +136,34 @@ int main(int argc, char *argv[])
 		while (!velocities[i].x && !velocities[i].y) {
 			velocities[i].x = (rand() % (MAX_SPEED * 2 + 1)) - MAX_SPEED;
 			velocities[i].y = (rand() % (MAX_SPEED * 2 + 1)) - MAX_SPEED;
+			velocities[0].x = 1;
+			velocities[0].y = 0;
+			velocities[1].x = 0;
+			velocities[1].y = 1;
 		}
 	}
-
-	while (!done)
-	{
-		velocityTime + 0.01;
-	}
-	velocities[0].x = 1 + velocityTime;
-	velocities[0].y = 0;
-	velocities[1].x = 0;
-	velocities[1].y = 1 + velocityTime;
 
 	// Main render loop
 	done = 0;
 	while (!done) {
-		// Check for events
+	// Check for events
 		while (SDL_PollEvent(&event)) {
 			if (event.type == SDL_QUIT || event.type == SDL_KEYDOWN) {
 				done = 1;
 			}
 		}
 		MoveSprites(window, renderer, sprite);
+
+		if (velocities[0].x > 0)
+		{
+			velocities[0].x+0.5;
+		}
+
+		if (velocities[1].y > 0)
+		{
+			velocities[1].y+0.5;
+		}
+
 		SDL_Delay(20);
 	}
 
