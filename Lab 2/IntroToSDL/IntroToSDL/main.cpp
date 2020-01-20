@@ -28,7 +28,7 @@ int LoadSprite(char *file, SDL_Renderer *renderer)
 
 	//sets the width and height of the images
 	sprite_w = temp->w;
-	sprite_h = 200;//temp->h;
+	sprite_h = temp->h;
 
 	// Set transparent pixel as the pixel at (0,0)
 	if (temp->format->palette) {
@@ -154,11 +154,12 @@ int main(int argc, char *argv[])
 		}
 		MoveSprites(window, renderer, sprite);
 
+		//If x velocity is greater than 0, increase velocity by 1
 		if (velocities[0].x > 0)
 		{
 			velocities[0].x++;
 		}
-
+		//if y velocity is greater than 1, increase velocity by 1
 		if (velocities[1].y > 0)
 		{
 			velocities[1].y++;
