@@ -24,7 +24,7 @@ freely.
 #define WINDOW_WIDTH    512
 #define WINDOW_HEIGHT   384
 #endif
-#define NUM_SPRITES     2
+#define NUM_SPRITES     4
 #define MAX_SPEED       1
 #define WW2 (WINDOW_WIDTH>>1)
 #define WH2 (WINDOW_HEIGHT>>1)
@@ -34,6 +34,7 @@ static SDL_Rect positions[NUM_SPRITES];
 static SDL_Rect velocities[NUM_SPRITES];
 static int sprite_w, sprite_h;
 SDL_Joystick *joy = NULL;
+SDL_Joystick *joy2 = NULL;
 
 /* Call this instead of exit(), so we can clean up SDL: atexit() is evil. */
 static void
@@ -168,8 +169,9 @@ main(int argc, char *argv[])
 	if (SDL_NumJoysticks() > 0)
 	{
 		joy = SDL_JoystickOpen(0);
-
+		joy2 = SDL_JoystickOpen(0);
 	}
+	
 
 	/* Initialize the sprite positions */
 	srand(time(NULL));
@@ -254,6 +256,24 @@ main(int argc, char *argv[])
 				positions[0].x, positions[0].y);
 			if (positions[0].y < 0)
 				positions[0].y = 0;
+		}
+		if (joy2)
+		{
+
+			positions[1].x += SDL_JoystickGetAxis(joy2, 0) / 6000;
+			positions[1].y += SDL_JoystickGetAxis(joy2, 1) / 6000;
+			if (positions[1].x > WINDOW_WIDTH - sprite_w)
+				positions[1].x = WINDOW_WIDTH - sprite_w;
+			printf("Object Position: (%d,%d)\n",
+				positions[1].x, positions[0].y);
+			if (positions[1].x < 0)
+				positions[1].x = 0;
+			if (positions[1].y > WINDOW_HEIGHT - sprite_h)
+				positions[1].y = WINDOW_HEIGHT - sprite_h;
+			printf("Object Position: (%d,%d)\n",
+				positions[1].x, positions[0].y);
+			if (positions[1].y < 0)
+				positions[1].y = 0;
 		}
 
 		MoveSprites(window, renderer, sprite);
