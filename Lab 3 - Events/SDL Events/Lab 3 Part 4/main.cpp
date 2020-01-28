@@ -39,6 +39,7 @@ static int sprite_w, sprite_h;
 static int alien_w, alien_h;
 static int cannonball_w, cannonball_h;
 static int fireball_w, fireball_h;
+int mouse_x, mouse_y;
 SDL_Joystick *joy = NULL;
 
 /* Call this instead of exit(), so we can clean up SDL: atexit() is evil. */
@@ -226,17 +227,33 @@ main(int argc, char *argv[])
 	srand(time(NULL));
 	for (i = 0; i < NUM_SPRITES; ++i)
 	{
-		positions[i].x = rand() % (WINDOW_WIDTH - sprite_w);
-		positions[i].y = rand() % (WINDOW_HEIGHT - sprite_h);
+		//positions[i].x = rand() % (WINDOW_WIDTH - sprite_w);
+		//positions[i].y = rand() % (WINDOW_HEIGHT - sprite_h);
 		positions[i].w = sprite_w;
 		positions[i].h = sprite_h;
+		//Position alien and cannon in respective starting point
+		positions[0].x = WINDOW_WIDTH - sprite_w;
+		positions[0].y = 0;
+		positions[1].x = 0;
+		positions[1].y = 0;
+		//Draw projectiles off screen for now
+		positions[2].x = -100;
+		positions[2].y = 0;
+		positions[3].x = -200;
+		positions[3].y = 0;
+		//Initialize velocities
 		velocities[i].x = 0;
 		velocities[i].y = 0;
-		while (!velocities[i].x && !velocities[i].y)
+		velocities[0].x = 0;
+		velocities[0].y = 0;
+		velocities[1].x = 0;
+		velocities[1].y = 0;
+		/*while (!velocities[i].x && !velocities[i].y)
 		{
 			velocities[i].x = (rand() % (MAX_SPEED * 2 + 1)) - MAX_SPEED;
 			velocities[i].y = (rand() % (MAX_SPEED * 2 + 1)) - MAX_SPEED;
-		}
+		
+		}*/
 	}
 
 	/* Main render loop */
@@ -253,16 +270,25 @@ main(int argc, char *argv[])
 				done = 1;
 				break;
 			case SDL_MOUSEMOTION:
+			{
+				SDL_GetMouseState(&mouse_x, &mouse_y);
+			}
+			case SDL_MOUSEBUTTONDOWN:
+			{
+				if (event.button.button == 1)
+				{
+					positions[2].x = positions[0].x;
+					positions[2].y = positions[0].y;
+					velocities[2].x = -1;
+				}
+			}
 			case SDL_JOYBUTTONDOWN:
 				printf("Button Pressed: %d\n", event.jbutton.button);
-				if (event.jbutton.which == 0 && event.jbutton.button == 0) // Button 1 on 1st Joystick
+				if (event.jbutton.which == 0)
 				{
-					positions[0].x = 0;
-					positions[0].y = 0;
-				}
-				else if (event.jbutton.which == 0 && event.jbutton.button == 1)  // Button 2 on 1st Joystick
-				{
-					done = 1;
+					positions[3].x = positions[1].x;
+					positions[3].y = positions[1].y;
+					velocities[3].x = 1;
 				}
 				break;
 				/*
@@ -292,24 +318,26 @@ main(int argc, char *argv[])
 		if (joy)
 		{
 
-			positions[0].x += SDL_JoystickGetAxis(joy, 0) / 6000;
-			positions[0].y += SDL_JoystickGetAxis(joy, 1) / 6000;
-			if (positions[0].x > WINDOW_WIDTH - sprite_w)
-				positions[0].x = WINDOW_WIDTH - sprite_w;
+			//positions[1].x += SDL_JoystickGetAxis(joy, 0) / 6000;
+			positions[1].y += SDL_JoystickGetAxis(joy, 1) / 6000;
+			if (positions[1].x > WINDOW_WIDTH - sprite_w)
+				positions[1].x = WINDOW_WIDTH - sprite_w;
 			printf("Object Position: (%d,%d)\n",
-				positions[0].x, positions[0].y);
-			if (positions[0].x < 0)
-				positions[0].x = 0;
-			if (positions[0].y > WINDOW_HEIGHT - sprite_h)
-				positions[0].y = WINDOW_HEIGHT - sprite_h;
+				positions[1].x, positions[0].y);
+			if (positions[1].x < 0)
+				positions[1].x = 0;
+			if (positions[1].y > WINDOW_HEIGHT - sprite_h)
+				positions[1].y = WINDOW_HEIGHT - sprite_h;
 			printf("Object Position: (%d,%d)\n",
-				positions[0].x, positions[0].y);
-			if (positions[0].y < 0)
-				positions[0].y = 0;
+				positions[1].x, positions[0].y);
+			if (positions[1].y < 0)
+				positions[1].y = 0;
 		}
 
+		positions[0].y = mouse_y;
+
 		MoveSprites(window, renderer);
-		SDL_Delay(10);
+		SDL_Delay(3);
 	}
 
 	quit(0);
