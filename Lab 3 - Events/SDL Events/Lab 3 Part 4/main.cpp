@@ -54,9 +54,7 @@ LoadSprite(char *file1,  SDL_Renderer *renderer, SDL_Texture* &someSprite)
 {
 
 		SDL_Surface *temp;
-		SDL_Surface *temp2;
-		SDL_Surface *temp3;
-		SDL_Surface *temp4;
+	
 		/* Load the sprite image */
 		temp = SDL_LoadBMP(file1);
 		
@@ -248,6 +246,8 @@ main(int argc, char *argv[])
 		velocities[0].y = 0;
 		velocities[1].x = 0;
 		velocities[1].y = 0;
+
+	
 		/*while (!velocities[i].x && !velocities[i].y)
 		{
 			velocities[i].x = (rand() % (MAX_SPEED * 2 + 1)) - MAX_SPEED;
@@ -275,20 +275,23 @@ main(int argc, char *argv[])
 			}
 			case SDL_MOUSEBUTTONDOWN:
 			{
+				//If mouse button 1 is pressed, set coordinates of respective shot to the x of the alien
+				//Set Velocity to actually travel across screen
 				if (event.button.button == 1)
 				{
 					positions[2].x = positions[0].x;
 					positions[2].y = positions[0].y;
-					velocities[2].x = -1;
+					velocities[2].x = -2;
 				}
 			}
 			case SDL_JOYBUTTONDOWN:
-				printf("Button Pressed: %d\n", event.jbutton.button);
+				//If button 0 is pressed, set coordinates of respective shot to the x of the alien
+				//Set Velocity to actually travel across screen
 				if (event.jbutton.which == 0)
 				{
 					positions[3].x = positions[1].x;
 					positions[3].y = positions[1].y;
-					velocities[3].x = 1;
+					velocities[3].x = 2;
 				}
 				break;
 				/*
@@ -317,24 +320,35 @@ main(int argc, char *argv[])
 		}
 		if (joy)
 		{
-
+			//Don't need commented code below, Just need Y axis motion
 			//positions[1].x += SDL_JoystickGetAxis(joy, 0) / 6000;
 			positions[1].y += SDL_JoystickGetAxis(joy, 1) / 6000;
 			if (positions[1].x > WINDOW_WIDTH - sprite_w)
 				positions[1].x = WINDOW_WIDTH - sprite_w;
-			printf("Object Position: (%d,%d)\n",
-				positions[1].x, positions[0].y);
+			
 			if (positions[1].x < 0)
 				positions[1].x = 0;
 			if (positions[1].y > WINDOW_HEIGHT - sprite_h)
 				positions[1].y = WINDOW_HEIGHT - sprite_h;
-			printf("Object Position: (%d,%d)\n",
-				positions[1].x, positions[0].y);
+			
 			if (positions[1].y < 0)
 				positions[1].y = 0;
 		}
 
+		//Set Cannon to follow Y coordinates of the mouse 
 		positions[0].y = mouse_y;
+
+		//If the shot hits a wall, reset to offscreen position
+		if (positions[2].x == 0)
+		{
+			positions[2].x = -100;
+			velocities[2].x = 0;
+		}
+		if (positions[3].x == 690)
+		{
+			positions[3].x = -200;
+			velocities[3].x = 0;
+		}
 
 		MoveSprites(window, renderer);
 		SDL_Delay(3);
