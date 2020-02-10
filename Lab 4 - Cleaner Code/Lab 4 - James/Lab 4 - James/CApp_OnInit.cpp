@@ -26,19 +26,19 @@ bool CApp::OnInit()
         return false;
 		
 
-	if (LoadSprite("cannon.bmp", renderer, sprite) < 0)
+	if (LoadSprite("cannon.bmp", sprite) < 0)
 	{
 		return false;
 	}
-	if (LoadSprite("alien.bmp", renderer, spriteAlien) < 0)
+	if (LoadSprite("alien.bmp", spriteAlien) < 0)
 	{
 		return false;
 	}
-	if (LoadSprite("cannonball.bmp", renderer, spriteCannonball) < 0)
+	if (LoadSprite("cannonball.bmp", spriteCannonball) < 0)
 	{
 		return false;
 	}
-	if (LoadSprite("fireball.bmp", renderer, spriteFireball) < 0)
+	if (LoadSprite("fireball.bmp", spriteFireball) < 0)
 	{
 		return false;
 	}

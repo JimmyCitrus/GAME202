@@ -10,7 +10,7 @@ CApp::CApp() {
 
 
 int
-CApp::LoadSprite(char *file, SDL_Renderer *renderer, SDL_Texture* &someSprite)
+CApp::LoadSprite(char *file,  SDL_Texture* &someSprite)
 {
     SDL_Surface *temp;
 
